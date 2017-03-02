@@ -98,11 +98,16 @@ Signing keystore + passwords are stored securely.
 
 ## Upload proguard mapping to firebase 
 Service account will be stored securely.
+
+Build app + upload proguard to firebase using: 
 ```
 ./gradlew -PFirebaseServiceAccountFilePath=/path/to/localconfig-895b7-firebase-crashreporting-v5jjd-fb0fc91c63.json :app:firebaseUploadReleaseProguardMapping
 ```
 
 ## Sign apk
+Manually sign the app in the build folder
 ```
 apksigner sign --ks /path/to/localconfig.jks --out app-release-signed.apk app-release-unsigned.apk
 ```
+
+## Upload to play store
