@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "757693352877",
+    "firebase_url": "https://localconfig-895b7.firebaseio.com",
+    "project_id": "localconfig-895b7",
+    "storage_bucket": "localconfig-895b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:757693352877:android:4b19ef0d2c77d6d1",
+        "android_client_info": {
+          "package_name": "com.izettle.localconfig.application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "757693352877-c8ppu4jeobl3bi3pkfin8io8bo4a0dve.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.izettle.localconfig.application",
+            "certificate_hash": "0400F412C1D29E3D554F5B107F2B4B354E6776C0"
+          }
+        },
+        {
+          "client_id": "757693352877-6isiq0jotn9isin0ogcct928t02d79kg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1orcENIa7Bmhubg7uHuelMHoBv8Jp9Dg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "757693352877-6isiq0jotn9isin0ogcct928t02d79kg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
