@@ -9,7 +9,7 @@ public class ConfigurationTable {
             + "("
             + ConfigurationFullCursorParser.Columns._ID + " INTEGER PRIMARY KEY, "
             + ConfigurationFullCursorParser.Columns.APPLICATION_ID + " INTEGER, "
-            + ConfigurationFullCursorParser.Columns.KEY + " TEXT, "
+            + ConfigurationFullCursorParser.Columns.KEY + " TEXT UNIQUE, "
             + ConfigurationFullCursorParser.Columns.VALUE + " TEXT, "
             + ConfigurationFullCursorParser.Columns.TYPE + " TEXT "
             + ")";

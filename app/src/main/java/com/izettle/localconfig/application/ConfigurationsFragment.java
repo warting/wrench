@@ -4,7 +4,9 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -32,7 +34,6 @@ import com.izettle.localconfiguration.ConfigProviderHelper;
 import com.izettle.localconfiguration.util.ConfigurationValueCursorParser;
 
 import java.util.ArrayList;
-
 
 public class ConfigurationsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -116,6 +117,15 @@ public class ConfigurationsFragment extends Fragment implements LoaderManager.Lo
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Button");
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
+                return true;
+            }
+            case R.id.action_application_settings: {
+                startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", application.applicationId, null)));
+                return true;
+            }
+            case R.id.action_delete_application: {
+                ConfigUtil.deleteApplication(getContext().getContentResolver(), application);
+                getActivity().finish();
                 return true;
             }
             default: {

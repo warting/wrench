@@ -8,7 +8,7 @@ public class ApplicationTable {
     public static final String CREATE = "CREATE TABLE " + TABLE_NAME
             + "("
             + ApplicationCursorParser.Columns._ID + " INTEGER PRIMARY KEY, "
-            + ApplicationCursorParser.Columns.APPLICATION_ID + " TEXT, "
+            + ApplicationCursorParser.Columns.APPLICATION_ID + " TEXT UNIQUE, "
             + ApplicationCursorParser.Columns.APPLICATION_LABEL + " TEXT "
             + ")";
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +19,15 @@ public class ApplicationRecyclerViewAdapter extends RecyclerView.Adapter<Applica
 
     private static final String TAG = "localconfig";
 
-    private final ArrayList<Application> mValues = new ArrayList<>();
+    private final ArrayList<Application> items = new ArrayList<>();
 
     public ApplicationRecyclerViewAdapter(ArrayList<Application> newApplications) {
-        mValues.addAll(newApplications);
+        items.addAll(newApplications);
     }
 
     public void setItems(ArrayList<Application> items) {
-        mValues.clear();
-        mValues.addAll(items);
+        this.items.clear();
+        this.items.addAll(items);
         notifyDataSetChanged();
     }
 
@@ -38,7 +39,7 @@ public class ApplicationRecyclerViewAdapter extends RecyclerView.Adapter<Applica
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Application application = mValues.get(position);
+        Application application = items.get(position);
 
         try {
             PackageManager packageManager = holder.applicationListItemBinding.getRoot().getContext().getPackageManager();
@@ -56,7 +57,7 @@ public class ApplicationRecyclerViewAdapter extends RecyclerView.Adapter<Applica
         holder.applicationListItemBinding.getRoot().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Application application1 = mValues.get(holder.getAdapterPosition());
+                final Application application1 = items.get(holder.getAdapterPosition());
 
                 Context context = v.getContext();
                 context.startActivity(ConfigurationsActivity.newIntent(context, application1));
@@ -66,7 +67,26 @@ public class ApplicationRecyclerViewAdapter extends RecyclerView.Adapter<Applica
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return items.size();
+    }
+
+    public ItemTouchHelper getItemTouchHelper(final SwipeDelete swipeDelete) {
+        return new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                Application item = items.get(viewHolder.getAdapterPosition());
+                swipeDelete.swiped(item);
+            }
+        });
+    }
+
+    public interface SwipeDelete {
+        void swiped(Application application);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -77,4 +97,5 @@ public class ApplicationRecyclerViewAdapter extends RecyclerView.Adapter<Applica
             this.applicationListItemBinding = applicationListItemBinding;
         }
     }
+
 }
