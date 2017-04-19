@@ -12,4 +12,5 @@ public class ApplicationTable {
             + ApplicationCursorParser.Columns.APPLICATION_LABEL + " TEXT "
             + ")";
 
+    public static final String DROP = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
 }

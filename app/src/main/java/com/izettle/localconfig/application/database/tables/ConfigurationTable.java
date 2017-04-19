@@ -14,5 +14,6 @@ public class ConfigurationTable {
             + ConfigurationFullCursorParser.Columns.TYPE + " TEXT "
             + ")";
 
-
+    public static final String DROP = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
 }
+

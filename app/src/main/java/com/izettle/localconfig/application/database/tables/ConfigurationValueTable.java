@@ -12,5 +12,5 @@ public class ConfigurationValueTable {
             + ConfigurationValueCursorParser.Columns.VALUE + " TEXT "
             + ")";
 
-
+    public static final String DROP = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
 }
