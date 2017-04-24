@@ -52,7 +52,7 @@ public class ConfigProvider extends ContentProvider {
     public ConfigProvider() {
     }
 
-    private static Application getCallingApplication(@Nullable Context context, SQLiteDatabase writableDatabase) {
+    private static synchronized Application getCallingApplication(@Nullable Context context, SQLiteDatabase writableDatabase) {
         if (context == null) {
             return null;
         }

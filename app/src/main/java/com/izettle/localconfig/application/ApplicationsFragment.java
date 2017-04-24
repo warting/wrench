@@ -7,6 +7,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,6 +90,15 @@ public class ApplicationsFragment extends Fragment implements LoaderManager.Load
                 if (adapter == null) {
                     adapter = new ApplicationRecyclerViewAdapter(newApplications);
                     fragmentApplicationsBinding.list.setAdapter(adapter);
+
+                    ItemTouchHelper itemTouchHelper = adapter.getItemTouchHelper(new ApplicationRecyclerViewAdapter.SwipeDelete() {
+                        @Override
+                        public void swiped(Application application) {
+                            ConfigUtil.deleteApplication(getContext().getContentResolver(), application);
+                        }
+                    });
+
+                    itemTouchHelper.attachToRecyclerView(fragmentApplicationsBinding.list);
                 } else {
                     adapter.setItems(newApplications);
                 }

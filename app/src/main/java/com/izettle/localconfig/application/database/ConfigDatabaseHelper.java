@@ -11,7 +11,7 @@ import com.izettle.localconfig.application.database.tables.ConfigurationValueTab
 
 public class ConfigDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "localConfig.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public ConfigDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -26,6 +26,14 @@ public class ConfigDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        if (oldVersion < 2) {
+            sqLiteDatabase.execSQL(ApplicationTable.DROP);
+            sqLiteDatabase.execSQL(ConfigurationTable.DROP);
+            sqLiteDatabase.execSQL(ConfigurationValueTable.DROP);
 
+            sqLiteDatabase.execSQL(ApplicationTable.CREATE);
+            sqLiteDatabase.execSQL(ConfigurationTable.CREATE);
+            sqLiteDatabase.execSQL(ConfigurationValueTable.CREATE);
+        }
     }
 }
