@@ -11,5 +11,6 @@
     <string name="application_not_installed">Application not installed</string>
     <string name="delete_application">Delete application</string>
     <string name="go_to_application_settings">Go to application settings</string>
+    <string name="filter_configurations">Filter configurations</string>
 
 </resources>

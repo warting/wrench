@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ConfigurationRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class ConfigurationRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int VIEW_TYPE_STRING = 1;
     private static final int VIEW_TYPE_INTEGER = 2;
@@ -41,11 +41,11 @@ public class ConfigurationRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
     private final ArrayList<ConfigurationFull> items = new ArrayList<>();
 
-    public ConfigurationRecyclerViewAdapter(ArrayList<ConfigurationFull> newConfigurations) {
+    ConfigurationRecyclerViewAdapter(ArrayList<ConfigurationFull> newConfigurations) {
         items.addAll(newConfigurations);
     }
 
-    public void setItems(ArrayList<ConfigurationFull> items) {
+    void setItems(ArrayList<ConfigurationFull> items) {
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ConfigurationListDiffCallbacks(this.items, items));
         diffResult.dispatchUpdatesTo(this);
         this.items.clear();
@@ -215,7 +215,7 @@ public class ConfigurationRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         return items.size();
     }
 
-    public ItemTouchHelper getItemTouchHelper(final SwipeDelete swipeDelete) {
+    ItemTouchHelper getItemTouchHelper(final SwipeDelete swipeDelete) {
         return new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -230,7 +230,7 @@ public class ConfigurationRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         });
     }
 
-    public interface SwipeDelete {
+    interface SwipeDelete {
         void swiped(ConfigurationFull configuration);
     }
 
@@ -274,7 +274,7 @@ public class ConfigurationRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         private final List<ConfigurationFull> mOldItems;
         private final List<ConfigurationFull> mNewItems;
 
-        public ConfigurationListDiffCallbacks(List<ConfigurationFull> oldItems, List<ConfigurationFull> newItems) {
+        ConfigurationListDiffCallbacks(List<ConfigurationFull> oldItems, List<ConfigurationFull> newItems) {
             mOldItems = oldItems;
             mNewItems = newItems;
         }
