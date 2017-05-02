@@ -207,6 +207,9 @@ public class ConfigurationsFragment extends Fragment implements LoaderManager.Lo
                             ConfigurationFullCursorParser.Columns.APPLICATION_ID + " = ?",
                             new String[]{String.valueOf(application._id)}, null);
                 } else {
+
+                    FirebaseAnalytics.getInstance(getContext()).logEvent(FirebaseAnalytics.Event.SEARCH, null);
+
                     return new CursorLoader(getContext(), ConfigProviderHelper.configurationUri(), ConfigurationFullCursorParser.PROJECTION,
                             ConfigurationFullCursorParser.Columns.APPLICATION_ID + " = ? AND " + ConfigurationFullCursorParser.Columns.KEY + " LIKE ?",
                             new String[]{String.valueOf(application._id), "%" + filter + "%"}, null);
