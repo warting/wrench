@@ -4,7 +4,9 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -12,8 +14,11 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.IntentCompat;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,15 +38,17 @@ import com.izettle.localconfiguration.util.ConfigurationValueCursorParser;
 
 import java.util.ArrayList;
 
-
-public class ConfigurationsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-
+public class ConfigurationsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SearchView.OnQueryTextListener {
     private static final int CONFIGURATIONS_LOADER = 1;
     private static final String ARG_APPLICATION = "ARG_APPLICATION";
     private static final String LOADER_EXTRA_APPLICATION = "LOADER_EXTRA_APPLICATION";
+    private static final String LOADER_ARG_FILTER = "LOADER_ARG_FILTER";
+    private static final String STATE_FILTER = "STATE_FILTER";
     FragmentConfigurationsBinding fragmentConfigurationsBinding;
     private Application application;
     private FirebaseAnalytics firebaseAnalytics;
+    private CharSequence currentFilter;
+    private SearchView searchView;
 
     public ConfigurationsFragment() {
     }
@@ -52,6 +59,13 @@ public class ConfigurationsFragment extends Fragment implements LoaderManager.Lo
         args.putParcelable(ARG_APPLICATION, application);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putCharSequence(STATE_FILTER, searchView.getQuery());
     }
 
     @Override
@@ -67,7 +81,12 @@ public class ConfigurationsFragment extends Fragment implements LoaderManager.Lo
         setHasOptionsMenu(true);
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
+
+        if (savedInstanceState != null) {
+            currentFilter = savedInstanceState.getCharSequence(STATE_FILTER);
+        }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,8 +102,7 @@ public class ConfigurationsFragment extends Fragment implements LoaderManager.Lo
         super.onResume();
 
         Application application = getArguments().getParcelable(ARG_APPLICATION);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(LOADER_EXTRA_APPLICATION, application);
+        Bundle bundle = getQueryBundle(application, null);
         getLoaderManager().initLoader(CONFIGURATIONS_LOADER, bundle, this);
     }
 
@@ -93,6 +111,48 @@ public class ConfigurationsFragment extends Fragment implements LoaderManager.Lo
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_configurations_list, menu);
 
+        MenuItem item = menu.findItem(R.id.action_filter_configurations);
+        searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+
+        MenuItemCompat.setOnActionExpandListener(item,
+                new MenuItemCompat.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem item) {
+
+                        return true; // Return true to collapse action view
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem item) {
+                        return true; // Return true to expand action view
+                    }
+                });
+
+        if (!TextUtils.isEmpty(currentFilter)) {
+            MenuItemCompat.expandActionView(item);
+            searchView.setQuery(currentFilter, true);
+        }
+
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        Bundle bundle = getQueryBundle(application, newText);
+        getLoaderManager().restartLoader(CONFIGURATIONS_LOADER, bundle, this);
+        return true;
+    }
+
+    private Bundle getQueryBundle(Application application, String filter) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(LOADER_EXTRA_APPLICATION, application);
+        bundle.putString(LOADER_ARG_FILTER, filter);
+        return bundle;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
     }
 
     @Override
@@ -118,6 +178,15 @@ public class ConfigurationsFragment extends Fragment implements LoaderManager.Lo
 
                 return true;
             }
+            case R.id.action_application_settings: {
+                startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", application.applicationId, null)));
+                return true;
+            }
+            case R.id.action_delete_application: {
+                ConfigUtil.deleteApplication(getContext().getContentResolver(), application);
+                getActivity().finish();
+                return true;
+            }
             default: {
                 return super.onOptionsItemSelected(item);
             }
@@ -132,8 +201,19 @@ public class ConfigurationsFragment extends Fragment implements LoaderManager.Lo
                 if (application == null) {
                     throw new NullPointerException();
                 }
-                return new CursorLoader(getContext(), ConfigProviderHelper.configurationUri(), ConfigurationFullCursorParser.PROJECTION,
-                        ConfigurationFullCursorParser.Columns.APPLICATION_ID + " = ?", new String[]{String.valueOf(application._id)}, null);
+                String filter = args.getString(LOADER_ARG_FILTER);
+                if (TextUtils.isEmpty(filter)) {
+                    return new CursorLoader(getContext(), ConfigProviderHelper.configurationUri(), ConfigurationFullCursorParser.PROJECTION,
+                            ConfigurationFullCursorParser.Columns.APPLICATION_ID + " = ?",
+                            new String[]{String.valueOf(application._id)}, null);
+                } else {
+
+                    FirebaseAnalytics.getInstance(getContext()).logEvent(FirebaseAnalytics.Event.SEARCH, null);
+
+                    return new CursorLoader(getContext(), ConfigProviderHelper.configurationUri(), ConfigurationFullCursorParser.PROJECTION,
+                            ConfigurationFullCursorParser.Columns.APPLICATION_ID + " = ? AND " + ConfigurationFullCursorParser.Columns.KEY + " LIKE ?",
+                            new String[]{String.valueOf(application._id), "%" + filter + "%"}, null);
+                }
             }
             default: {
                 throw new UnsupportedOperationException("Invalid id: " + id);
