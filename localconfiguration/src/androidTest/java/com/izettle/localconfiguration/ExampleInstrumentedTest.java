@@ -1,4 +1,4 @@
-package com.izettle.localconfiguration.library;
+package com.izettle.localconfiguration;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.izettle.localconfiguration.library.test", appContext.getPackageName());
+        assertEquals("com.izettle.localconfiguration.test", appContext.getPackageName());
     }
 }
