@@ -44,7 +44,7 @@ android {
 }
 
 dependencies {
-    kapt "com.google.dagger:dagger-android-processor:2.15"
+    kapt "com.google.dagger:dagger-android-processor:2.16"
     kapt "com.google.dagger:dagger-compiler:2.16"
 
     testImplementation 'junit:junit:4.12'
@@ -63,8 +63,8 @@ dependencies {
     implementation 'android.arch.lifecycle:extensions:1.1.1'
 
     implementation "com.google.dagger:dagger:2.16"
-    implementation "com.google.dagger:dagger-android:2.15"
-    implementation "com.google.dagger:dagger-android-support:2.15"
+    implementation "com.google.dagger:dagger-android:2.16"
+    implementation "com.google.dagger:dagger-android-support:2.16"
 
     implementation "com.izettle.wrench:wrench-core:0.3"
     implementation project(":wrench-livedata")
