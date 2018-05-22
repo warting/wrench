@@ -44,33 +44,33 @@ android {
 }
 
 dependencies {
-    kapt "com.google.dagger:dagger-android-processor:2.16"
-    kapt "com.google.dagger:dagger-compiler:2.16"
+    kapt deps.dagger.android_support_compiler
+    kapt deps.dagger.compiler
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:2.18.3'
+    testImplementation deps.junit
+    testImplementation deps.mockito.core
 
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation deps.espresso.core
+    androidTestImplementation deps.atsl.runner
+    androidTestImplementation deps.atsl.rules
     implementation "com.izettle.wrench:wrench-core:0.3"
     androidTestImplementation "com.izettle.wrench:wrench-prefs:0.3"
 
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation "com.android.support:design:27.1.1"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    implementation deps.support.app_compat
+    implementation deps.support.v4
+    implementation deps.support.design
+    implementation deps.constraint_layout
+    implementation deps.lifecycle.extensions
 
-    implementation "com.google.dagger:dagger:2.16"
-    implementation "com.google.dagger:dagger-android:2.16"
-    implementation "com.google.dagger:dagger-android-support:2.16"
+    implementation deps.dagger.runtime
+    implementation deps.dagger.android
+    implementation deps.dagger.android_support
 
     implementation "com.izettle.wrench:wrench-core:0.3"
     implementation project(":wrench-livedata")
-    debugImplementation "com.izettle.wrench:wrench-prefs:0.3"
+    debugImplementation "${deps.wrench_version}"
     releaseImplementation "com.izettle.wrench:wrench-prefs-no-op:0.3"
 
     implementation project(":wrench-service")
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation deps.kotlin.stdlib
 }

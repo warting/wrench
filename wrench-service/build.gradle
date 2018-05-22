@@ -29,9 +29,9 @@ android {
 
 dependencies {
     implementation "com.izettle.wrench:wrench-core:0.3"
-    testImplementation 'junit:junit:4.12'
-    implementation 'com.android.support:support-annotations:27.1.1'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    testImplementation deps.junit
+    implementation deps.support.annotations
+    implementation deps.kotlin.stdlib
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
